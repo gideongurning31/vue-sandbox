@@ -1,21 +1,36 @@
-const app = Vue.createApp({
+const generateRandom = (min, max) => Math.floor(Math.random() * (max - min)) + min;
+
+const MONSTER = {
+  minDamage: 5,
+  maxDamage: 10
+};
+const PLAYER = {
+  minDamage: 4,
+  maxDamage: 8
+};
+
+Vue.createApp({
   data() {
     return {
-      enteredGoals: '',
-      goals: []
+      playerHealth: 100,
+      monsterHealth: 100
     };
   },
-  methods: {
-    addGoal() {
-      if (this.enteredGoals.length > 0) {
-        this.goals.push(this.enteredGoals);
-        this.enteredGoals = '';
-      }
+  watch: {
+    playerHealth(value) {
+      console.log('PLAYER HEALTH:', value);
     },
-    removeGoal(index) {
-      this.goals.splice(index, 1);
+    monsterHealth(value) {
+      console.log('MONSTER HEALTH:', value);
+    }
+  },
+  methods: {
+    basicAttack() {
+      this.monsterHealth -= generateRandom(PLAYER.minDamage, PLAYER.maxDamage);
+      this.monsterAttack();
+    },
+    monsterAttack() {
+      this.playerHealth -= generateRandom(MONSTER.minDamage, MONSTER.maxDamage);
     }
   }
-});
-
-app.mount('#user-goals');
+}).mount('#game');
