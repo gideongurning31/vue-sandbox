@@ -31,7 +31,7 @@
     <section id="controls">
       <button @click="basicAttack">ATTACK</button>
       <button @click="specialAttack" :disabled="!specialAttackEnabled">SPECIAL ATTACK</button>
-      <button>HEAL</button>
+      <button @click="healPlayer" :disabled="!healEnabled">HEAL</button>
       <button>SURRENDER</button>
     </section>
     <section id="log" class="container">

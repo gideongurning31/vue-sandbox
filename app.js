@@ -7,9 +7,12 @@ const MONSTER = {
 const PLAYER = {
   minDamage: 4,
   maxDamage: 8,
-  minSpecAttackDamage: 12,
-  maxSpecAttackDamage: 25,
-  specialStack: 3
+  specialStack: 3,
+  minSpecAttackDamage: 10,
+  maxSpecAttackDamage: 15,
+  healStack: 2,
+  minHealValue: 10,
+  maxHealValue: 12
 };
 
 Vue.createApp({
@@ -37,6 +40,9 @@ Vue.createApp({
     },
     specialAttackEnabled() {
       return this.specialStack === PLAYER.specialStack;
+    },
+    healEnabled() {
+      return this.specialStack === PLAYER.healStack;
     }
   },
   methods: {
@@ -51,6 +57,14 @@ Vue.createApp({
       this.specialStack = 0;
       this.monsterHealth -= generateRandom(PLAYER.minSpecAttackDamage, PLAYER.maxSpecAttackDamage);
       this.monsterAttack();
+    },
+    healPlayer() {
+      const healValue = generateRandom(PLAYER.minHealValue, PLAYER.maxHealValue);
+      if (this.playerHealth + healValue < 100) {
+        this.specialStack = 0;
+        this.playerHealth += healValue;
+        this.monsterAttack();
+      }
     },
     monsterAttack() {
       this.playerHealth -= generateRandom(MONSTER.minDamage, MONSTER.maxDamage);
