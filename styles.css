@@ -111,9 +111,13 @@ button:disabled {
 }
 
 .log--damage {
-  color: red;
+  color: crimson;
 }
 
 .log--heal {
-  color: green;
+  color: darkolivegreen;
+}
+
+.bold {
+  font-weight: bold;
 }

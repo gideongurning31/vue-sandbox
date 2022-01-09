@@ -21,7 +21,8 @@ Vue.createApp({
       specialStack: 0,
       playerHealth: 100,
       monsterHealth: 100,
-      gameState: null
+      gameState: null,
+      battleLog: []
     };
   },
   watch: {
@@ -54,16 +55,22 @@ Vue.createApp({
   },
   methods: {
     basicAttack() {
-      this.monsterHealth -= generateRandom(PLAYER.minDamage, PLAYER.maxDamage);
+      const damage = generateRandom(PLAYER.minDamage, PLAYER.maxDamage);
+      this.monsterHealth -= damage;
       this.monsterAttack();
       if (this.specialStack < PLAYER.specialStack) {
         this.specialStack++;
       }
+
+      this.addBattleLog('Player', 'deal damage', damage);
     },
     specialAttack() {
+      const damage = generateRandom(PLAYER.minSpecAttackDamage, PLAYER.maxSpecAttackDamage);
       this.specialStack = 0;
-      this.monsterHealth -= generateRandom(PLAYER.minSpecAttackDamage, PLAYER.maxSpecAttackDamage);
+      this.monsterHealth -= damage;
       this.monsterAttack();
+
+      this.addBattleLog('Player', 'deal damage with special attack', damage);
     },
     healPlayer() {
       const healValue = generateRandom(PLAYER.minHealValue, PLAYER.maxHealValue);
@@ -71,16 +78,26 @@ Vue.createApp({
         this.specialStack = 0;
         this.playerHealth += healValue;
         this.monsterAttack();
+        this.addBattleLog('Player', 'heals himself', healValue);
       }
     },
     monsterAttack() {
-      this.playerHealth -= generateRandom(MONSTER.minDamage, MONSTER.maxDamage);
+      const damage = generateRandom(MONSTER.minDamage, MONSTER.maxDamage);
+      this.playerHealth -= damage;
+      this.addBattleLog('Monster', 'deal damage', damage);
+    },
+    surrender() {
+      this.gameState = 'YOU LOST';
     },
     restart() {
       this.specialStack = 0;
       this.playerHealth = 100;
       this.monsterHealth = 100;
       this.gameState = null;
+      this.battleLog = [];
+    },
+    addBattleLog(by, action, value) {
+      this.battleLog.unshift({ by, action, value });
     }
   }
 }).mount('#game');

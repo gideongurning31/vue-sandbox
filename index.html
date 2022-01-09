@@ -36,11 +36,18 @@
       <button @click="basicAttack">ATTACK</button>
       <button @click="specialAttack" :disabled="!specialAttackEnabled">SPECIAL ATTACK</button>
       <button @click="healPlayer" :disabled="!healEnabled">HEAL</button>
-      <button>SURRENDER</button>
+      <button @click="surrender">SURRENDER</button>
     </section>
     <section id="log" class="container">
       <h2>Battle Log</h2>
-      <ul></ul>
+      <ul v-for="log in battleLog">
+        <span :class="{ 'log--player': log.by === 'Player', 'log--monster': log.by === 'Monster' }">{{ log.by }}</span>
+        {{ ` ${log.action} by` }}
+        <span :class="['bold', log.action === 'heals himself' ? 'log--heal' : 'log--damage']">
+          &nbsp;{{ log.value }}&nbsp;
+        </span>
+        points
+      </ul>
     </section>
   </div>
 </body>
