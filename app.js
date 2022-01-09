@@ -20,15 +20,22 @@ Vue.createApp({
     return {
       specialStack: 0,
       playerHealth: 100,
-      monsterHealth: 100
+      monsterHealth: 100,
+      gameState: null
     };
   },
   watch: {
     playerHealth(value) {
-      console.log('PLAYER HEALTH:', value);
+      if (value <= 0) {
+        this.playerHealth = 0;
+        this.gameState = 'YOU LOST';
+      }
     },
     monsterHealth(value) {
-      console.log('MONSTER HEALTH:', value);
+      if (value <= 0) {
+        this.monsterHealth = 0;
+        this.gameState = 'YOU WIN';
+      }
     }
   },
   computed: {
@@ -68,6 +75,12 @@ Vue.createApp({
     },
     monsterAttack() {
       this.playerHealth -= generateRandom(MONSTER.minDamage, MONSTER.maxDamage);
+    },
+    restart() {
+      this.specialStack = 0;
+      this.playerHealth = 100;
+      this.monsterHealth = 100;
+      this.gameState = null;
     }
   }
 }).mount('#game');
