@@ -6,12 +6,16 @@ const MONSTER = {
 };
 const PLAYER = {
   minDamage: 4,
-  maxDamage: 8
+  maxDamage: 8,
+  minSpecAttackDamage: 12,
+  maxSpecAttackDamage: 25,
+  specialStack: 3
 };
 
 Vue.createApp({
   data() {
     return {
+      specialStack: 0,
       playerHealth: 100,
       monsterHealth: 100
     };
@@ -24,9 +28,28 @@ Vue.createApp({
       console.log('MONSTER HEALTH:', value);
     }
   },
+  computed: {
+    monsterHealthBar() {
+      return { width: this.monsterHealth + '%' };
+    },
+    playerHealthBar() {
+      return { width: this.playerHealth + '%' };
+    },
+    specialAttackEnabled() {
+      return this.specialStack === PLAYER.specialStack;
+    }
+  },
   methods: {
     basicAttack() {
       this.monsterHealth -= generateRandom(PLAYER.minDamage, PLAYER.maxDamage);
+      this.monsterAttack();
+      if (this.specialStack < PLAYER.specialStack) {
+        this.specialStack++;
+      }
+    },
+    specialAttack() {
+      this.specialStack = 0;
+      this.monsterHealth -= generateRandom(PLAYER.minSpecAttackDamage, PLAYER.maxSpecAttackDamage);
       this.monsterAttack();
     },
     monsterAttack() {
